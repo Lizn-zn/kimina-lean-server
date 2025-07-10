@@ -118,7 +118,7 @@ theorem lean_workbook_10009 (a b c: ℝ) (ha : a ≥ 0 ∧ b ≥ 0 ∧ c ≥ 0 �
 nlinarith [sq_nonneg (a - b), sq_nonneg (b - c), sq_nonneg (c - a),
 sq_nonneg (a + b + c)]"""
 
-resposne = client.verify([
+response = client.verify([
     {"proof": mock_proof, "custom_id": "1"},
     {"proof": mock_proof, "custom_id": "2"}
 ], timeout=30)
@@ -167,6 +167,18 @@ response:
 | `LEANSERVER_WORKSPACE`               | $(pwd)        | Root directory containing `mathlib` and `repl`         |
 | `LEANSERVER_MAX_REPLS`               | **CPU count** | Maximum number of Lean REPL instances                  |
 | `LEANSERVER_MAX_CONCURRENT_REQUESTS` | **CPU count** | Maximum number of concurrent requests in the Lean REPL |
+| `LEANSERVER_HEALTHCHECK_CPU_USAGE_THRESHOLD` | **None** | CPU usage threshold for healthcheck |
+| `LEANSERVER_HEALTHCHECK_MEMORY_USAGE_THRESHOLD` | **None** | Memory usage threshold for healthcheck |
+| `LEANSERVER_REPL_MEMORY_LIMIT_GB` | **None** | Memory limit for REPLs |
+| `LEANSERVER_REPL_MEMORY_CHECK_INTERVAL` | **None** | Number of consecutive commands that run on REPL before memory check |
+| `LEANSERVER_HARD_ENFORCE_MEMORY_LIMIT` | **False** | Add per REPL memory limits directly when spawning the lake env repl process (may only work for Linux) |
+
+
+Note:
+-  `LEANSERVER_REPL_MEMORY_LIMIT_GB` needs to be used together with `LEANSERVER_REPL_MEMORY_CHECK_INTERVAL`
+-  In some bloated systems, memory detection can be slow, which impacts performance. However, this isn't an issue in streamlined systems.
+- `LEANSERVER_HARD_ENFORCE_MEMORY_LIMIT` can help avoid certain OOM issues (see Issue #25)
+
 
 ## 🚀 Performance Benchmarks
 
